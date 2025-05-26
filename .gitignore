@@ -1,0 +1,23 @@
+cat <<EOF > .gitignore
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# Local files
+planfile
+env_info
+*.log
+*.bak
+
+# OS cruft
+.DS_Store
+
+# Shell scripts
+*.sh~
+
+# Optional
+structure.txt
+EOF
+
