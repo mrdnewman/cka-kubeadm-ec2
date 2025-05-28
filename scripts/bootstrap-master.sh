@@ -43,4 +43,6 @@ sudo -u ec2-user kubectl apply -f https://raw.githubusercontent.com/coreos/flann
 # Extract join command for worker nodes
 kubeadm token create --print-join-command > /joincommand.sh
 chmod +x /joincommand.sh
+chmod 644 /joincommand.sh 
+chown ec2-user:ec2-user /joincommand.sh
 

@@ -30,3 +30,9 @@ variable "bootstrap_file_name" {
   type        = string
 }
 
+variable "master_ip" {
+  description = "Public IP of the master node (used by workers)"
+  type        = string
+  default     = ""
+}
+

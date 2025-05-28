@@ -39,3 +39,9 @@ variable "allow_ssh_from_cidr" {
   default     = "0.0.0.0/0"
 }
 
+variable "master_ip" {
+  description = "Public IP of the master node"
+  type        = string
+  default     = ""
+}
+

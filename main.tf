@@ -55,5 +55,6 @@ module "worker" {
   security_group_id   = module.security_group.security_group_id
   instance_name       = "cka-worker"
   bootstrap_file_name = "bootstrap-worker.sh"
+  master_ip           = module.master.public_ip
 }
 

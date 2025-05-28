@@ -1,5 +1,4 @@
 
-
 resource "aws_instance" "this" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
@@ -8,7 +7,9 @@ resource "aws_instance" "this" {
   vpc_security_group_ids = [var.security_group_id]
   associate_public_ip_address = true
 
-  user_data = file("${path.module}/../../scripts/${var.bootstrap_file_name}")
+  user_data = templatefile("${path.module}/../../scripts/${var.bootstrap_file_name}", {
+    master_ip = var.master_ip
+  })
 
   tags = {
     Name = var.instance_name
