@@ -48,12 +48,13 @@ module "master" {
 
 module "worker" {
   source              = "./modules/ec2"
+  count               = 2
   ami_id              = data.aws_ami.amazon_linux_2.id
   instance_type       = "t2.small"
   key_name            = var.key_name
   subnet_id           = module.vpc.public_subnet_id
   security_group_id   = module.security_group.security_group_id
-  instance_name       = "cka-worker"
+  instance_name       = "cka-worker-${count.index + 1}"
   bootstrap_file_name = "bootstrap-worker.sh"
 }
 
