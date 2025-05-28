@@ -28,18 +28,22 @@ yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 systemctl enable kubelet
 systemctl start kubelet
 
-# ===== JOIN LOGIC (choose your poison) =====
+# Get the master IP injected from Terraform
+master_ip="${master_ip}"
 
-# Option A: Join command passed via user_data (manual, not ideal)
-# bash /joincommand.sh
+echo "[INFO] Attempting to retrieve join command from master at $MASTER_IP..."
 
-# Option B: Use scp to pull join command from master (replace IP + key)
-# You’ll need to open port 22 in the master's SG
-MASTER_IP="GET MASTER IP"
-scp -o StrictHostKeyChecking=no -i /home/ec2-user/your-key.pem ec2-user@${MASTER_IP}:/joincommand.sh /joincommand.sh
+# Copy the join script from the master node
+scp -q -o StrictHostKeyChecking=no ec2-user@${master_ip}:/joincommand.sh /joincommand.sh
+if [ $? -ne 0 ]; then
+  echo "[ERROR] Failed to retrieve /joincommand.sh from master node at $MASTER_IP"
+  exit 1
+fi
+
+echo "[INFO] Retrieved joincommand.sh successfully."
+
+# Make it executable and run it
 chmod +x /joincommand.sh
 bash /joincommand.sh
 
-# Option C: Inject the join command via Terraform output and pass it to the worker
-# That's cleaner but needs templating or a file provisioner (can help with that too)
-
+echo "[INFO] Worker node successfully joined the cluster."
