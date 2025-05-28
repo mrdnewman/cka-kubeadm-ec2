@@ -1,7 +1,3 @@
-# Remove EC2 manually and it seems to work
-
-
-
 
 #!/bin/bash
 set -euo pipefail
