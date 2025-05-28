@@ -54,7 +54,8 @@ module "worker" {
   subnet_id           = module.vpc.public_subnet_id
   security_group_id   = module.security_group.security_group_id
   instance_name       = "cka-worker"
-  bootstrap_file_name = "bootstrap-worker.sh"
+  bootstrap_file_name = var.bootstrap_file_name
+  #bootstrap_file_name = "bootstrap-worker.sh"
   master_ip           = module.master.public_ip
 }
 

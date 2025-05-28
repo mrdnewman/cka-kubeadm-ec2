@@ -45,3 +45,9 @@ variable "master_ip" {
   default     = ""
 }
 
+variable "bootstrap_file_name" {
+  description = "The name of the bootstrap script template for user_data"
+  type        = string
+  default     = "bootstrap-worker.sh.tmpl"
+}
+
