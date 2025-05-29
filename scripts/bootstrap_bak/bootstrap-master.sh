@@ -10,20 +10,11 @@ systemctl start docker
 
 # 👇 Add this block to avoid permission errors on Docker socket
 usermod -aG docker ec2-user
+newgrp docker
 
 # Disable swap (kubeadm hates swap)
 swapoff -a
 sed -i '/swap/d' /etc/fstab
-
-# Enable necessary kernel modules and sysctl settings
-modprobe br_netfilter
-echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
-echo '1' > /proc/sys/net/ipv4/ip_forward
-cat <<EOF > /etc/sysctl.d/k8s.conf
-net.bridge.bridge-nf-call-iptables = 1
-net.ipv4.ip_forward = 1
-EOF
-sysctl --system
 
 # Add updated Kubernetes repo (v1.29 as example)
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
@@ -38,6 +29,7 @@ EOF
 
 # Install Kubernetes components
 yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+
 systemctl enable kubelet
 systemctl start kubelet
 
@@ -58,4 +50,3 @@ chmod +x /joincommand.sh
 chmod 644 /joincommand.sh 
 chown ec2-user:ec2-user /joincommand.sh
 
-echo "[SUCCESS] Kubernetes master node initialized and Flannel applied."
