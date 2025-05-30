@@ -44,7 +44,19 @@ systemctl start kubelet
 # Get the master IP injected from Terraform
 master_ip="${master_ip}"
 
-echo "[INFO] Attempting to retrieve join command from master at $MASTER_IP..."
+
+# Fetch the private key from AWS Secrets Manager
+aws secretsmanager get-secret-value \
+  --region us-west-2 \
+  --secret-id cka-key-private \
+  --query SecretString \
+  --output text > /home/ec2-user/cka-key
+
+# Set proper permissions
+chmod 400 /home/ec2-user/cka-key.pem
+chown ec2-user:ec2-user /home/ec2-user/cka-key
+
+echo "[INFO] Attempting to retrieve join command from master at $master_ip..."
 
 if [ -z "$master_ip" ]; then
   echo "[ERROR] MASTER_IP is not set. Make sure Terraform injects the master IP."
