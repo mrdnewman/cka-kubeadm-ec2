@@ -46,7 +46,6 @@
 
 <h2 style="color:#AF7AC5;"><b>📘 Usage Instructions</b></h2>
 
-```bash
 # Initialize and apply the infrastructure
 terraform init
 terraform apply -auto-approve
