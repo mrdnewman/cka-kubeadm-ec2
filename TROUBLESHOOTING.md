@@ -49,11 +49,12 @@ Symptoms:
 - kubectl get nodes shows nothing
 - kubeadm join output is silent or errors on networking
 
-🔍 Problem			🧠 Why						✅ Fix
-ip_forward != 1			Required for pod networking			Add net.ipv4.ip_forward=1 to /etc/sysctl.conf + run sysctl -p
-Join command missing		Master hasn't pushed to Secrets Manager yet	Add retry loop in worker bootstrap (see below)
-Worker starts too fast		Master not ready with join command		Add sleep 100 at top of worker script
-No container runtime		kubelet can't launch pods			Set KUBELET_EXTRA_ARGS=--container-runtime-endpoint=unix:///run/containerd/containerd.sock
+| 🔍 Problem              | 🧠 Why                                         | ✅ Fix                                                                 |
+|------------------------|-----------------------------------------------|------------------------------------------------------------------------|
+| `ip_forward != 1`      | Required for pod networking                   | Add `net.ipv4.ip_forward=1` to `/etc/sysctl.conf` and run `sysctl -p` |
+| Join command missing   | Master hasn’t pushed to Secrets Manager yet   | Add retry loop in worker bootstrap (see below)                        |
+| Worker starts too fast | Master not ready with join command            | Add `sleep 100` at top of worker script                               |
+| No container runtime   | `kubelet` can’t launch pods                   | Set `KUBELET_EXTRA_ARGS=--container-runtime-endpoint=unix:///run/containerd/containerd.sock` |
 
 ---
 
