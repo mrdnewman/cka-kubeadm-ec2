@@ -60,7 +60,7 @@ terraform apply -auto-approve
 # - Poll Secrets Manager until the join command appears
 # - Join the cluster
 
-<h2 style="color:#AF7AC5;"><b>🛠️ Prerequisites</b></h2>
+<h2 style="color:#AF7AC5;"><b> 🛠️ Prerequisites</b></h2>
 
 Terraform >= 1.3.x
 
