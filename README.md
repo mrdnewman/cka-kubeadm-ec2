@@ -1,8 +1,8 @@
 
-<h1 align="center" style="color:#2E86C1;"><b>☁️ Bare Metal Kubernetes with Terraform + kubeadm + AWS Secrets Manager</b></h1>
+<h1 align="center" style="color:#2E86C1;"><b>☁️ Bare Metal K8s with Terraform + kubeadm + AWS Secrets Manager</b></h1>
 
 <p align="center">
-  <i>Deploy a fully functioning Kubernetes cluster using **Ubuntu 22.04**, **Terraform**, and **kubeadm** — no EKS, no shortcuts. Built for hands-on DevOps learning with full control of the control plane.</i>
+  <i>Deploy a fully functioning Kubernetes cluster using **Ubuntu 22.04**, **Terraform**, and **kubeadm** — no EKS, no shortcuts. Built for hands-on DevOps learning and **CKA **Prep **Exam.</i>
 </p>
 
 ---
