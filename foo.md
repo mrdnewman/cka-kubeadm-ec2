@@ -1,6 +1,10 @@
 <h2 style="color:#DC7633;"><b>🛠️ ⚠️ Caveats and Notes</b></h2>
-
----
+- This setup assumes Ubuntu 22.04 LTS (minimal AMI). Scripts are tailored for it.
+- If the worker node tries to join before the master is ready, it may fail.
+- This is now handled with a polling loop — no more sleep hacks.
+- Ports 6443 (API server), 10250, and 8472/UDP (Flannel VXLAN) must be open between nodes.
+- Your AWS user must have permissions for EC2 and Secrets Manager.
+-If re-running Terraform, destroy old infra first (terraform destroy) to avoid conflicts.
 
 <h2 style="color:#DC7633;"><b>🛠️ Prerequisites</b></h2>
 Terraform >= 1.3.x
