@@ -39,6 +39,7 @@ This project sets up a **highly portable Kubernetes cluster using Terraform and 
 ---
 
 📦 Linear Perspective
+
 🏗️ Builds a K8s-ready VPC, Subnets, Security Groups, and EC2 Instances (via Terraform)
 
 🔐 Creates a secure EC2 Key Pair using a GitHub-hosted public key
