@@ -25,14 +25,13 @@ variable "instance_name" {
   default     = null
 }
 
-variable "bootstrap_file_name" {
-  description = "The filename of the bootstrap script"
+variable "iam_instance_profile" {
+  description = "IAM instance profile to attach to the EC2 instance"
   type        = string
 }
 
-variable "master_ip" {
-  description = "Public IP of the master node (used by workers)"
+variable "bootstrap_file_name" {
+  description = "The filename of the bootstrap script"
   type        = string
-  default     = ""
 }
 

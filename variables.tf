@@ -50,4 +50,3 @@ variable "bootstrap_file_name" {
   type        = string
   default     = "bootstrap-worker.sh.tmpl"
 }
-

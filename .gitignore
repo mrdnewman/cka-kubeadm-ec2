@@ -10,6 +10,7 @@ planfile
 env_info
 *.log
 *.bak
+terraform.tfvars
 
 # OS cruft
 .DS_Store
