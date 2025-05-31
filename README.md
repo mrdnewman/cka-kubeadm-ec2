@@ -13,6 +13,19 @@ This project sets up a **highly portable Kubernetes cluster using Terraform and 
 
 ---
 
+🛠️ Prerequisites
+✅ Terraform >= 1.3.x
+
+✅ AWS CLI configured (aws configure)
+
+✅ IAM user with SecretsManager + EC2 permissions
+
+✅ AWS Free Tier eligibility
+
+✅ GitHub SSH key (if using GitHub-hosted public keys for key pair)
+
+---
+
 <h2 style="color:#F4D03F;"><b>⚙️ What’s Under the Hood</b></h2>
 
 <ul>
