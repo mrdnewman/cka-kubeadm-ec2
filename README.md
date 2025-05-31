@@ -102,5 +102,4 @@ GitHub SSH key if using GitHub-hosted public keys for key pair
 ---
 
 ### ✨ *Built for DevOps/Platform engineers who want to know how the sausage is made*  
-<p align="center"><em>(This line will center, but styling is limited)</em></p>
 
