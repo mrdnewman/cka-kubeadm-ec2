@@ -7,8 +7,6 @@
 
 ---
 
-<h2 style="color:#28B463;"><b>📌 Overview</b></h2>
-
 ## 🧰 What This Project Does
 
 - 🏗️ Provisions AWS EC2 instances via Terraform (1 master, N workers)
