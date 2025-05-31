@@ -2,7 +2,7 @@
 <h1 align="center" style="color:#2E86C1;"><b>☁️ Bare Metal Kubernetes with Terraform + kubeadm + AWS Secrets Manager</b></h1>
 
 <p align="center">
-  <i>Build your own production-grade K8s lab on EC2 from scratch with full bootstrap automation</i>
+  <i>Deploy a fully functioning Kubernetes cluster using **Ubuntu 22.04**, **Terraform**, and **kubeadm** — no EKS, no shortcuts. Built for hands-on DevOps learning with full control of the control plane.</i>
 </p>
 
 ---
@@ -11,18 +11,6 @@
 
 This project sets up a **highly portable Kubernetes cluster using Terraform and kubeadm**, with dynamic worker node joins powered by **AWS Secrets Manager**. Perfect for CKA prep or DevOps engineers who want to understand Kubernetes from the ground up.
 
----
-
-🛠️ Prerequisites
-✅ Terraform >= 1.3.x
-
-✅ AWS CLI configured (aws configure)
-
-✅ IAM user with SecretsManager + EC2 permissions
-
-✅ AWS Free Tier eligibility
-
-✅ GitHub SSH key (if using GitHub-hosted public keys for key pair)
 
 ---
 
