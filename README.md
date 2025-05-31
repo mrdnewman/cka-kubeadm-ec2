@@ -9,8 +9,14 @@
 
 <h2 style="color:#28B463;"><b>📌 Overview</b></h2>
 
-This project sets up a **highly portable Kubernetes cluster using Terraform and kubeadm**, with dynamic worker node joins powered by **AWS Secrets Manager**. Perfect for CKA prep or DevOps engineers who want to understand Kubernetes from the ground up.
+## 🧰 What This Project Does
 
+- 🏗️ Provisions AWS EC2 instances via Terraform (1 master, N workers)
+- 🔐 Generates and stores the kubeadm `join` command securely in **AWS Secrets Manager**
+- 🤖 Automatically bootstraps control plane and joins workers using custom bash scripts
+- 🐳 Uses **containerd** as the container runtime
+- 🔧 Installs **Flannel CNI** for pod networking
+- 💡 Uses a loop logic on workers to *wait* for the join command to appear
 
 ---
 
