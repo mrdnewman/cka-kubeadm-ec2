@@ -2,13 +2,11 @@
 
 
 <h2 style="color:#DC7633;"><b>📘  Prerequisites</b></h2>
-
 # Initialize and apply the infrastructure
 terraform init
 terraform apply -auto-approve
-
-> Master node will bootstrap and push join command to AWS Secrets Manager
-> Worker nodes will auto-join by retrieving the command at runtime
+Master node will bootstrap and push join command to AWS Secret Manager
+Worker node will auto-join by retrieving the command at runtime
 
 
 <h2 style="color:#DC7633;"><b>🛠️ ⚠️ Caveats and Notes</b></h2>
