@@ -136,3 +136,14 @@ FINAL Pro Tips
 Confirm node readiness with:
 kubectl get nodes
 
+🧪 How to Verify
+- SSH into the master node:
+kubectl get nodes
+
+You should see output like:
+
+NAME             STATUS   ROLES           AGE   VERSION
+ip-10-0-1-123    Ready    control-plane   5m    v1.29.15
+ip-10-0-1-456    Ready    <none>          2m    v1.29.15
+
+
