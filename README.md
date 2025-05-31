@@ -50,6 +50,22 @@
 terraform init
 terraform apply -auto-approve
 
+# Creates the network infrastructure**
+   - VPC, subnet, internet gateway, route tables
+   - Security group with open ports required for Kubernetes cluster comms (6443, 22, etc.)
+
+# Provisions EC2 instances**
+   - Master node and worker nodes using Ubuntu 22.04 AMI
+   - Each instance gets a public IP (for lab/demo use)
+   - Injects a bootstrap shell script via `user_data` for auto-configuration
+
+# Creates SSH key pair**
+   - If using GitHub SSH key, it pulls your public key and registers it as an AWS key pair
+
+# Creates AWS Secrets Manager entry**
+   - A named secret (e.g., `/k8s/joincommand`) is created and left empty
+   - The master node will later push the actual join command here at runtime
+
 # Master node will:
 - Install containerd, kubeadm, kubelet
 - Run kubeadm init
