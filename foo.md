@@ -1,9 +1,10 @@
 
 
 
-<h2 style="color:#DC7633;"><b>📘  Prerequisites</b></h2>
+<h2 style="color:#AF7AC5;"><b>📘 Usage Instructions</b></h2>
 
 # Initialize and apply the infrastructure
+
 terraform init
 terraform apply -auto-approve
 
