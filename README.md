@@ -33,12 +33,13 @@
 <h2 style="color:#5DADE2;"><b>🚀 Achievements / Résumé Bullets</b></h2>
 
 <ul>
-  <li>Built a dynamic Kubernetes cluster using only Terraform and bash — no GUI, no shortcuts</li>
+  <li>Built a dynamic Kubernetes cluster using only Terraform and raw EC2, bash — no GUI, no shortcuts</li>
   <li>Engineered a secure, cloud-native method to pass kubeadm join tokens using Secrets Manager</li>
-  <li>Automated bootstrap scripts for hands-free provisioning and self-healing infrastructure</li>
+  <li>Built resilient worker bootstrap scripts with join polling logic</li>
   <li>Resolved kubelet/containerd misconfigurations and kernel-level networking prerequisites</li>
   <li>Debugged preflight join issues under time constraints — like a real-world fire drill</li>
   <li>Achieved seamless cross-node communication using Flannel CNI on hardened EC2 nodes</li>
+  <li>Hardened infra by minimizing public exposure and enforcing least privilege IAM</li>
 </ul>
 
 ---
@@ -60,7 +61,24 @@ terraform apply -auto-approve
 # - Poll Secrets Manager until the join command appears
 # - Join the cluster
 
-<h2 style="color:#AF7AC5;"><b> 🛠️ Prerequisites</b></h2>
+---
+
+⚠️ Caveats and Notes
+This setup assumes Ubuntu 22.04 LTS (minimal AMI). Scripts are tailored for it.
+
+If the worker node tries to join before the master is ready, it may fail.
+
+✅ This is now handled with a polling loop — no more sleep hacks.
+
+Ports 6443 (API server), 10250, and 8472/UDP (Flannel VXLAN) must be open between nodes.
+
+Your AWS user must have permissions for EC2 and Secrets Manager.
+
+If re-running Terraform, destroy old infra first (terraform destroy) to avoid conflicts.
+
+---
+
+🛠️ Prerequisites
 
 Terraform >= 1.3.x
 
@@ -72,7 +90,17 @@ AWS Free Tier eligibility
 
 GitHub SSH key if using GitHub-hosted public keys for key pair
 
+---
 
+📎 Resources
+Kubeadm Docs
 
+Terraform AWS Provider
 
+AWS Secrets Manager
 
+Flannel CNI
+
+<h2 align="center">✨ Built for DevOps engineers who want to know how the sausage is made</h2>
+
+---
