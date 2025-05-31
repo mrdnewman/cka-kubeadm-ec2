@@ -1,4 +1,5 @@
 <h2 style="color:#DC7633;"><b>🛠️ ⚠️ Caveats and Notes</b></h2>
+
 - This setup assumes Ubuntu 22.04 LTS (minimal AMI). Scripts are tailored for it.
 - If the worker node tries to join before the master is ready, it may fail.
 - This is now handled with a polling loop — no more sleep hacks.
