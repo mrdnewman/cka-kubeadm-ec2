@@ -101,6 +101,6 @@ AWS Secrets Manager
 
 Flannel CNI
 
-<h2 align="center">✨ Built for DevOps engineers who want to know how the sausage is made</h2>
+<h2 align="center"> Built for DevOps/Platform engineers who want to know how the sausage is made</h2>
 
 ---
