@@ -92,16 +92,15 @@ GitHub SSH key if using GitHub-hosted public keys for key pair
 
 ---
 
-📎 Resources
-Kubeadm Docs
+## 📎 Resources
 
-Terraform AWS Provider
+- [**Kubeadm Docs**](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/)
+- [**Terraform AWS Provider**](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+- [**AWS Secrets Manager**](https://docs.aws.amazon.com/secretsmanager/)
+- [**Flannel CNI**](https://github.com/flannel-io/flannel)
 
-AWS Secrets Manager
+---
 
-Flannel CNI
-
-<p align="center">
-  <b>✨ Built for DevOps/Platform engineers who want to know how the sausage is made</b>
-</p>
+### ✨ *Built for DevOps/Platform engineers who want to know how the sausage is made*  
+<p align="center"><em>(This line will center, but styling is limited)</em></p>
 
