@@ -38,6 +38,21 @@ This project sets up a **highly portable Kubernetes cluster using Terraform and 
 
 ---
 
+📦 Linear Perspective
+🏗️ Builds a K8s-ready VPC, Subnets, Security Groups, and EC2 Instances (via Terraform)
+
+🔐 Creates a secure EC2 Key Pair using a GitHub-hosted public key
+
+📜 Boots the master node with kubeadm init, sets up Flannel CNI
+
+🔑 Pushes the worker kubeadm join command to AWS Secrets Manager
+
+🤖 Worker nodes retrieve the join command and auto-join during bootstrap
+
+⚙️ All nodes are configured to use containerd, not Docker
+
+---
+
 <h2 style="color:#5DADE2;"><b>🚀 Achievements / Résumé Bullets</b></h2>
 
 <ul>
