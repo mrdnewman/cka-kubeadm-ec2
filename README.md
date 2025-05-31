@@ -66,12 +66,12 @@ terraform apply -auto-approve
    - A named secret (e.g., `/k8s/joincommand`) is created and left empty
    - The master node will later push the actual join command here at runtime
 
-- **Master node will:
+- **Master node will:**
 - Install containerd, kubeadm, kubelet
 - Run kubeadm init
 - Push join command to AWS Secrets Manager
 
-- **Worker nodes will:
+- **Worker nodes will:**
 - Install containerd, kubeadm, kubelet
 - Poll Secrets Manager until the join command appears
 - Join the cluster
