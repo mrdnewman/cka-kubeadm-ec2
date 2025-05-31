@@ -5,7 +5,7 @@ REGION="us-west-2"
 SECRET_NAME="kubeadmJoinCommand"
 USER_HOME="/home/ubuntu"
 
-#sleep 100
+sleep 100
 
 echo "[BOOTSTRAP] Starting Kubernetes worker setup..."
 
