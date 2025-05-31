@@ -1,61 +1,112 @@
-
 #!/bin/bash
-set -e
+set -euo pipefail
 
-# Update and install Docker
-yum update -y
-amazon-linux-extras install docker -y
-systemctl enable docker
-systemctl start docker
+REGION="us-west-2"
+SECRET_NAME="kubeadmJoinCommand"
+USER_HOME="/home/ubuntu"
 
-# 👇 Add this block to avoid permission errors on Docker socket
-usermod -aG docker ec2-user
+echo "[BOOTSTRAP] Starting Kubernetes master setup..."
 
-# Disable swap (kubeadm hates swap)
-swapoff -a
-sed -i '/swap/d' /etc/fstab
+# ---------- Update & install dependencies ----------
+sudo apt-get update -y
+sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common jq awscli gnupg lsb-release
 
-# Enable necessary kernel modules and sysctl settings
-modprobe br_netfilter
-echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
-echo '1' > /proc/sys/net/ipv4/ip_forward
-cat <<EOF > /etc/sysctl.d/k8s.conf
-net.bridge.bridge-nf-call-iptables = 1
-net.ipv4.ip_forward = 1
+# ---------- Install containerd ----------
+echo "[BOOTSTRAP] Installing containerd..."
+install -m 0755 -d /etc/apt/keyrings
+
+if [ ! -f /etc/apt/keyrings/docker.gpg ]; then
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor > /etc/apt/keyrings/docker.gpg
+  chmod a+r /etc/apt/keyrings/docker.gpg
+fi
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
+| sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update -y
+sudo apt-get install -y containerd
+
+mkdir -p /etc/containerd
+containerd config default | sudo tee /etc/containerd/config.toml > /dev/null
+
+# ── Force containerd to use systemd cgroups ────────────────────────────────
+sudo sed -i 's/^\s*SystemdCgroup = .*/        SystemdCgroup = true/' /etc/containerd/config.toml
+# ──────────────────────────────────────────────────────────────────────────
+
+sudo systemctl restart containerd
+sudo systemctl enable containerd
+
+# ---------- Add Kubernetes apt repo (overwrite-safe) ----------
+echo "[BOOTSTRAP] Adding Kubernetes apt repository..."
+rm -f /usr/share/keyrings/kubernetes-archive-keyring.gpg
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key \
+  | gpg --dearmor -o /usr/share/keyrings/kubernetes-archive-keyring.gpg
+
+echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] \
+https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /" \
+| sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+sudo apt-get update -y
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+sudo ln -sf /usr/bin/kubectl /usr/local/bin/kubectl
+
+# ── Enable kubelet service ─────────────────────────────────────────────────
+sudo systemctl enable kubelet
+# ────────────────────────────────────────────────────────────────────────────
+
+# ---------- Disable swap ----------
+sudo swapoff -a
+sudo sed -i '/ swap / s/^/#/' /etc/fstab
+
+# ---------- Enable bridged networking & IP forwarding ───────────────────────
+sudo modprobe br_netfilter
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.ipv4.ip_forward                 = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables  = 1
 EOF
-sysctl --system
+sudo sysctl --system
 
-# Add updated Kubernetes repo (v1.29 as example)
-cat <<EOF > /etc/yum.repos.d/kubernetes.repo
-[kubernetes]
-name=Kubernetes
-baseurl=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/
-enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/repodata/repomd.xml.key
+# ---------- Configure kubelet to use containerd ----------
+echo "[BOOTSTRAP] Configuring kubelet to use containerd..."
+cat <<EOF | sudo tee /etc/default/kubelet
+KUBELET_EXTRA_ARGS=--container-runtime-endpoint=unix:///run/containerd/containerd.sock
 EOF
 
-# Install Kubernetes components
-yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
-systemctl enable kubelet
-systemctl start kubelet
 
-# Initialize the Kubernetes control plane with Flannel pod network CIDR
-kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=Swap
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet
 
-# Setup kubeconfig for ec2-user
-mkdir -p /home/ec2-user/.kube
-cp -i /etc/kubernetes/admin.conf /home/ec2-user/.kube/config
-chown ec2-user:ec2-user /home/ec2-user/.kube/config
+# ---------- Initialize Kubernetes master ----------
+if [ ! -f /etc/kubernetes/admin.conf ]; then
+  echo "[BOOTSTRAP] Running kubeadm init..."
+  sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --cri-socket=unix:///run/containerd/containerd.sock
+else
+  echo "[BOOTSTRAP] kubeadm already initialized. Skipping."
+fi
 
-# Apply Flannel CNI
-sudo -u ec2-user kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+# ---------- Configure kubeconfig for ubuntu user ----------
+sudo chown ubuntu:ubuntu /etc/kubernetes/admin.conf
+mkdir -p /home/ubuntu/.kube
+sudo cp /etc/kubernetes/admin.conf /home/ubuntu/.kube/config
+sudo chown -R ubuntu:ubuntu /home/ubuntu/.kube
 
-# Extract join command for worker nodes
-kubeadm token create --print-join-command > /joincommand.sh
-chmod +x /joincommand.sh
-chmod 644 /joincommand.sh 
-chown ec2-user:ec2-user /joincommand.sh
+# ---------- Deploy Flannel CNI if not present ----------
+if ! sudo -u ubuntu kubectl get pods -n kube-system | grep -q kube-flannel; then
+  sudo -u ubuntu kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+fi
 
-echo "[SUCCESS] Kubernetes master node initialized and Flannel applied."
+# ---------- Generate & store join command in AWS Secrets Manager ----------
+JOIN_CMD=$(sudo kubeadm token create --print-join-command)
+echo "[BOOTSTRAP] Generated join command: $JOIN_CMD"
+
+aws secretsmanager put-secret-value \
+  --secret-id "$SECRET_NAME" \
+  --secret-string "$JOIN_CMD" \
+  --region "$REGION"
+
+echo "[BOOTSTRAP] Updated Secrets Manager secret '$SECRET_NAME' with join command."
+echo "[BOOTSTRAP] Kubernetes master setup complete."
