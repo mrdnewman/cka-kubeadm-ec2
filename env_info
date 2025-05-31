@@ -1,4 +1,0 @@
-
-master_ip = "54.190.44.144"
-vpc_id = "vpc-0c0a1f74deb63c416"
-worker_ip = "35.164.61.239"
