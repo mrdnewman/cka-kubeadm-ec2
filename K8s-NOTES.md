@@ -81,7 +81,7 @@ A no-nonsense, go-to reference for daily Kubernetes operations — works on **ku
 
 ---
 
- Services
+# Services
 
 - List services\
 `kubectl get svc`

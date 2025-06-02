@@ -57,3 +57,9 @@ variable "worker_count" {
   default     = 2
 }
 
+variable "cluster_name" {
+  description = "Kubernetes cluster name"
+  type        = string
+  default     = "bm-k8s-clstr"
+}
+

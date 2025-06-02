@@ -44,6 +44,7 @@ module "security_group" {
 
 module "master" {
   source               = "./modules/ec2"
+  cluster_name         = var.cluster_name
   ami_id               = data.aws_ami.ubuntu.id
   instance_type        = "t2.medium"
   key_name             = var.key_name
@@ -52,25 +53,23 @@ module "master" {
   instance_name        = "cka-master"
   iam_instance_profile = module.iam.master_instance_profile_name
   bootstrap_file_name  = "${path.root}/scripts/bootstrap-master.sh"
+  
+
 }
 
 module "worker" {
-  count                = var.worker_count
   source               = "./modules/ec2"
+  count                = var.worker_count
+  cluster_name         = var.cluster_name
   ami_id               = data.aws_ami.ubuntu.id
   instance_type        = "t2.medium"
   key_name             = var.key_name
   subnet_id            = module.vpc.public_subnet_id
   security_group_id    = module.security_group.security_group_id
-  instance_name         = "worker-${count.index}"
-  #instance_name        = "cka-worker"
+  instance_name        = format("worker-%02d", count.index + 1)
+  #instance_name       = "worker-${count.index}"
+  #instance_name       = "cka-worker"
   iam_instance_profile = module.iam.worker_instance_profile_name
   bootstrap_file_name  = "${path.root}/scripts/bootstrap-worker.sh"
- 
-  # 🔧 pass the tags
-  tags = {
-    Name        = "worker-${count.index}"
-  }
-
 }
 

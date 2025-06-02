@@ -41,3 +41,8 @@ variable "tags" {
   default     = {}
 }
 
+variable "cluster_name" {
+  description = "K8s cluster name"
+  type        = string
+}
+

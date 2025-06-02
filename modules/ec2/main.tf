@@ -8,17 +8,21 @@ resource "aws_instance" "this" {
   associate_public_ip_address = true
   iam_instance_profile        = var.iam_instance_profile
 
-  tags = var.tags
-  #tags = {
-    ##Name = var.instance_name
-    #tags = var.tags
-  #}
+  # Use either templatefile OR file, not both
+  user_data = templatefile("${path.module}/scripts/bootstrap-master.sh", {
+    cluster_name = var.cluster_name
+  })
 
-  user_data = file(var.bootstrap_file_name)
+  #tags = var.tags
+  tags = merge(
+    var.tags,    # your common/global tags if any
+    {
+      Name = var.instance_name  # this is the magic tag for AWS Console name
+    }
+  )
 
   root_block_device {
     volume_size = 20
     volume_type = "gp2"
   }
 }
-

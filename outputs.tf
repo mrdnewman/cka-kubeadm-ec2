@@ -21,10 +21,7 @@ output "worker_ips" {
   description = "Map of worker names to public IPs"
   value = {
     for i, w in module.worker :
-    "worker-${i + 1}" => w.public_ip
+    format("worker-%02d", i + 1) => w.public_ip
   }
 }
-
-
-
 
