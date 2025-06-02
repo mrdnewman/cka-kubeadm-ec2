@@ -8,9 +8,11 @@ resource "aws_instance" "this" {
   associate_public_ip_address = true
   iam_instance_profile        = var.iam_instance_profile
 
-  tags = {
-    Name = var.instance_name
-  }
+  tags = var.tags
+  #tags = {
+    ##Name = var.instance_name
+    #tags = var.tags
+  #}
 
   user_data = file(var.bootstrap_file_name)
 

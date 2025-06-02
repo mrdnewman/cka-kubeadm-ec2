@@ -50,3 +50,10 @@ variable "bootstrap_file_name" {
   type        = string
   default     = "bootstrap-worker.sh.tmpl"
 }
+
+variable "worker_count" {
+  description = "Number of worker nodes"
+  type        = number
+  default     = 2
+}
+

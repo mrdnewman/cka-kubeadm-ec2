@@ -55,14 +55,22 @@ module "master" {
 }
 
 module "worker" {
+  count                = var.worker_count
   source               = "./modules/ec2"
   ami_id               = data.aws_ami.ubuntu.id
   instance_type        = "t2.medium"
   key_name             = var.key_name
   subnet_id            = module.vpc.public_subnet_id
   security_group_id    = module.security_group.security_group_id
-  instance_name        = "cka-worker"
+  instance_name         = "worker-${count.index}"
+  #instance_name        = "cka-worker"
   iam_instance_profile = module.iam.worker_instance_profile_name
   bootstrap_file_name  = "${path.root}/scripts/bootstrap-worker.sh"
+ 
+  # 🔧 pass the tags
+  tags = {
+    Name        = "worker-${count.index}"
+  }
+
 }
 

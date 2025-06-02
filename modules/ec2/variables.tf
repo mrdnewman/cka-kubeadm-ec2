@@ -35,3 +35,9 @@ variable "bootstrap_file_name" {
   type        = string
 }
 
+variable "tags" {
+  type        = map(string)
+  description = "Tags to apply to the instance"
+  default     = {}
+}
+
