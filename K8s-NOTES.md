@@ -20,7 +20,7 @@ A no-nonsense, go-to reference for daily Kubernetes operations — works on **ku
 
 ## Cluster Status & Info
 
-- Show nodes and their status
+- Show nodes and their status\
 kubectl get nodes
 
 - Get detailed node info
