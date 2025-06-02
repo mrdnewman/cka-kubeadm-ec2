@@ -9,11 +9,14 @@ resource "aws_instance" "this" {
   iam_instance_profile        = var.iam_instance_profile
 
   # Use either templatefile OR file, not both
-  user_data = templatefile("${path.module}/scripts/bootstrap-master.sh", {
+  #user_data = templatefile("${path.module}/scripts/bootstrap-master.sh", {
+  #  cluster_name = var.cluster_name
+  #})
+
+  user_data = templatefile(var.bootstrap_file_name, {
     cluster_name = var.cluster_name
   })
 
-  #tags = var.tags
   tags = merge(
     var.tags,    # your common/global tags if any
     {

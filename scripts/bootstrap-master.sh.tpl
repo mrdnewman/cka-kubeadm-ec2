@@ -81,9 +81,24 @@ sudo systemctl daemon-reload
 sudo systemctl restart kubelet
 
 # ---------- Initialize Kubernetes master ----------
+
+cat <<EOF > /tmp/kubeadm-config.yaml
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: InitConfiguration
+nodeRegistration:
+  criSocket: unix:///run/containerd/containerd.sock
+---
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: ClusterConfiguration
+clusterName: ${cluster_name}
+kubernetesVersion: stable
+networking:
+  podSubnet: 10.244.0.0/16
+EOF
+
 if [ ! -f /etc/kubernetes/admin.conf ]; then
   echo "[BOOTSTRAP] Running kubeadm init..."
-  sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --cri-socket=unix:///run/containerd/containerd.sock
+  sudo kubeadm init --config=/tmp/kubeadm-config.yaml
 else
   echo "[BOOTSTRAP] kubeadm already initialized. Skipping."
 fi

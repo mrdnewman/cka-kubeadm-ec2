@@ -32,6 +32,9 @@ A no-nonsense, go-to reference for daily Kubernetes operations — works on **ku
 - Show cluster info\
 `kubectl cluster-info`
 
+- Show cluster name\\
+`kubectl config current-context | cut -d'@' -f2`
+
 ---
 
 # Working With Pods

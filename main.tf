@@ -52,7 +52,8 @@ module "master" {
   security_group_id    = module.security_group.security_group_id
   instance_name        = "cka-master"
   iam_instance_profile = module.iam.master_instance_profile_name
-  bootstrap_file_name  = "${path.root}/scripts/bootstrap-master.sh"
+  #bootstrap_file_name  = "${path.root}/scripts/bootstrap-master.sh"
+  bootstrap_file_name  = "${path.root}/scripts/bootstrap-master.sh.tpl"
   
 
 }
@@ -70,6 +71,7 @@ module "worker" {
   #instance_name       = "worker-${count.index}"
   #instance_name       = "cka-worker"
   iam_instance_profile = module.iam.worker_instance_profile_name
-  bootstrap_file_name  = "${path.root}/scripts/bootstrap-worker.sh"
+  #bootstrap_file_name  = "${path.root}/scripts/bootstrap-worker.sh"
+  bootstrap_file_name  = "${path.root}/scripts/bootstrap-worker.sh.tpl"
 }
 
